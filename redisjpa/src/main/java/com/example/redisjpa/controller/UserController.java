@@ -28,9 +28,11 @@ public class UserController {
         return userService.save(user);
     }
 
+    @ResponseBody
     @RequestMapping("/delete/{id}")
-    public void deleteUserById(@PathVariable("id") Long id){
-        userService.deleteById(id);
+    public String deleteUserById(@PathVariable("id") Long id){
+        boolean bRet = userService.deleteById(id);
+        return bRet ? "delete succuss" : "no data had been delete2";
     }
 
 }

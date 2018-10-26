@@ -21,5 +21,5 @@ public interface UserService {
      * 根据Id删除用户信息
      * @param id
      */
-    void deleteById(Long id);
+    boolean deleteById(Long id);
 }

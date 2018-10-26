@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,8 +20,10 @@ public class UserServiceImpl implements UserService {
     @Cacheable(value="userCache")
     @Override
     public List<User> getAllUser() {
+        System.out.println("first time query or after reflush");
         return userDao.findAll();
     }
+
     //allEntries 清空缓存所有属性 确保更新后缓存刷新
     @CacheEvict(value="userCache", allEntries=true)
     @Override
@@ -31,7 +34,12 @@ public class UserServiceImpl implements UserService {
     //allEntries 清空缓存所有属性 确保更新后缓存刷新
     @CacheEvict(value="userCache", allEntries=true)
     @Override
-    public void deleteById(Long id) {
-        userDao.deleteById(id);
+    public boolean deleteById(Long id) {
+        Optional<User> user = userDao.findById(id);
+        if(user.isPresent()){
+            userDao.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
